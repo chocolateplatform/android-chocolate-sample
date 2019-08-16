@@ -1,26 +1,4 @@
 # Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
-# Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
 # in /home/jesnia/Android/Sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
@@ -96,8 +74,7 @@
 -keep class com.squareup.picasso.** {*;}
 -dontwarn com.squareup.picasso.**
 -dontwarn com.squareup.okhttp.**
-# skip Moat classes
--keep class com.moat.** {*;}
+
 
 -dontwarn com.moat.**
 # skip AVID classes
@@ -126,8 +103,6 @@
 -keep class rx.schedulers.TestScheduler { public <methods>; }
 -keep class rx.schedulers.Schedulers { public static ** test(); }
 
-# MOAT
--keep class com.moat.** { public protected private *; }
 
 # Retrofit
 -dontwarn okio.**
@@ -136,14 +111,6 @@
 
 # For removing warnings due to lack of Multi-Window support
 -dontwarn android.app.Activity
-
-
--keep public class android.webkit.JavascriptInterface {}
-
-
--keep class com.google.android.gms.common.GooglePlayServicesUtil {*;}
--keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {*;}
--keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {*;}
 
 
 #Google IMA
@@ -179,7 +146,6 @@ public static final *** NULL;
 -keepnames class * implements android.os.Parcelable {
 public static final ** CREATOR;
 }
--keep class com.google.android.gms.ads.identifier.** { *; }
 
 -dontwarn com.vdopia.ads.lw.R$id
 
@@ -279,9 +245,6 @@ public static final ** CREATOR;
     @com.google.android.gms.common.annotation.KeepName *;
 }
 
--keepnames class * implements android.os.Parcelable {
-    public static final ** CREATOR;
-}
 # End, Mopub
 
 # Tapjoy
