@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.amazon.device.ads.AdRegistration;
 import com.vdopia.ads.lw.Chocolate;
 import com.vdopia.ads.lw.InitCallback;
 import com.vdopia.ads.lw.LVDOAdRequest;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AdRegistration.enableTesting(true); //amazon
+        
         adRequest = new LVDOAdRequest(this);
         Chocolate.enableLogging(true);  //don't set for production
         Chocolate.enableChocolateTestAds(true);  //don't set for production

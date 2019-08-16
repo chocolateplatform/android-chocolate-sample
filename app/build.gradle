@@ -13,7 +13,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            useProguard true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -39,7 +40,7 @@ dependencies {
                 exclude group: 'com.google.android.gms'
                 exclude group: 'com.android.support'
             }
-    implementation 'com.vdopia.ads.lw:google-adapter:16.0.0.c'
+    implementation 'com.vdopia.ads.lw:google-adapter-airkast:16.0.1'
     implementation 'com.google.android.gms:play-services-ads:16.0.0' //11.0.4 minimum is required, 16.0.0 or newer recommended!
     implementation('com.google.android.ads.consent:consent-library:1.0.7') {
         exclude group: 'com.android.support'
@@ -49,8 +50,8 @@ dependencies {
     implementation('com.mopub:mopub-sdk:5.8.0@aar') {
         transitive = true
         exclude group: 'com.android.support'
-        exclude group: 'com.google.android.exoplayer'
-        exclude group: 'com.google.android.gms'
+        //exclude group: 'com.google.android.exoplayer'
+        //exclude group: 'com.google.android.gms'
     }
     implementation 'com.vdopia.ads.lw:tapjoy-adapter:12.2.1'
     implementation 'com.tapjoy:tapjoy-android-sdk:12.2.1@aar'
