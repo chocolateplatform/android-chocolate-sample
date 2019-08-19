@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         Chocolate.enableLogging(true);  //don't set for production
         Chocolate.enableChocolateTestAds(true);  //don't set for production
         Chocolate.enableChooseMediatorsForTesting(true);  //don't set for production
+        Chocolate.setAutoClose(true); //only set true for AirKast
         Chocolate.init(this, API_KEY, adRequest, new InitCallback() {
             @Override
             public void onSuccess() {
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-
+        ((TextView)findViewById(R.id.textView)).setText("Inview No-Fill");
     }
 
     @Override
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onInterstitialFailed(LVDOInterstitialAd lvdoInterstitialAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-
+        ((TextView)findViewById(R.id.textView)).setText("Interstitial No-Fill");
     }
 
     @Override
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onPrerollAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-
+        ((TextView)findViewById(R.id.textView)).setText("Preroll No-Fill");
     }
 
     @Override
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onRewardedVideoFailed(LVDORewardedAd lvdoRewardedAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-
+        ((TextView)findViewById(R.id.textView)).setText("Rewarded No-Fill");
     }
 
     @Override
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onRewardedVideoShownError(LVDORewardedAd lvdoRewardedAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-
+        ((TextView)findViewById(R.id.textView)).setText("Rewarded Got Fill, but Error Showing");
     }
 
     @Override
