@@ -1,5 +1,6 @@
 package com.chocolateplatform.androidall;
 
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         adRequest = new LVDOAdRequest(this);
         Chocolate.enableLogging(true);  //don't set for production
         Chocolate.enableChocolateTestAds(true);  //don't set for production
-        Chocolate.enableChooseMediatorsForTesting(true);  //don't set for production
-        Chocolate.setAutoClose(true); //only set true for AirKast
+        //Chocolate.setAutoClose(true); //only set true for AirKast
         Chocolate.init(this, API_KEY, adRequest, new InitCallback() {
             @Override
             public void onSuccess() {
@@ -60,19 +60,43 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     }
 
     public void loadInterstitialAd(View view) {
-        interstitialAd.loadAd(adRequest);
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ChocolatePartners.setInterstitialPartners(adRequest);
+                interstitialAd.loadAd(adRequest);
+            }
+        });
     }
 
     public void loadRewardedAd(View view) {
-        rewardedAd.loadAd(adRequest);
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_REWARDED, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ChocolatePartners.setRewardedPartners(adRequest);
+                rewardedAd.loadAd(adRequest);
+            }
+        });
     }
 
     public void loadInviewAd(View view) {
-        inviewAd.loadAd(adRequest);
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ChocolatePartners.setInviewPartners(adRequest);
+                inviewAd.loadAd(adRequest);
+            }
+        });
     }
 
     public void loadPrerollAd(View view) {
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PRE_ROLL, this);
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ChocolatePartners.setPrerollPartners(adRequest);
+                preRollVideoAd.loadAd(adRequest, LVDOAdSize.PRE_ROLL, MainActivity.this);
+            }
+        });
     }
 
     @Override
