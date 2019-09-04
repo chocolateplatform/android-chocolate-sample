@@ -27,7 +27,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.vdopia.ads.lw:coresdk-airkast:2.8.7'
+    implementation 'com.vdopia.ads.lw:coresdk:2.8.7'
     implementation 'com.vdopia.ads.lw:adcolony-adapter:3.3.11'
     implementation 'com.vdopia.ads.lw:amazon-adapter:5.9.1'
     implementation 'com.vdopia.ads.lw:applovin-adapter:9.8.4'
