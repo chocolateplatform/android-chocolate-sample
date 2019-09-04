@@ -59,6 +59,45 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         preRollVideoAd = new PreRollVideoAd(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (interstitialAd != null)  {
+            interstitialAd.resume();
+        }
+        if (rewardedAd != null) {
+            rewardedAd.resume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (interstitialAd != null)  {
+            interstitialAd.pause();
+        }
+        if (rewardedAd != null) {
+            rewardedAd.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (interstitialAd != null)  {
+            interstitialAd.destroyView();
+        }
+        if (rewardedAd != null) {
+            rewardedAd.destroyView();
+        }
+        if (inviewAd != null) {
+            inviewAd.destroyView();
+        }
+        if (preRollVideoAd != null) {
+            preRollVideoAd.destroyView();
+        }
+    }
+
     public void loadInterstitialAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
             @Override
