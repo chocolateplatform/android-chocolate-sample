@@ -32,12 +32,13 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private LVDOBannerAd inviewAd;
     private PreRollVideoAd preRollVideoAd;
 
+    private VideoHelper videoHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AdRegistration.enableTesting(true); //amazon
-        
+
         adRequest = new LVDOAdRequest(this);
         Chocolate.enableLogging(true);  //don't set for production
         Chocolate.enableChocolateTestAds(true);  //don't set for production
@@ -45,14 +46,16 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         Chocolate.init(this, API_KEY, adRequest, new InitCallback() {
             @Override
             public void onSuccess() {
-
+                //Do not pre-fetch ads here.  Chocolate does it automatically, internally.
+                //This callback simply lets you know it was fine.
             }
 
             @Override
-            public void onError(String s) {
+            public void onError(String initError) {
 
             }
         });
+
         rewardedAd = new LVDORewardedAd(this, this);
         interstitialAd = new LVDOInterstitialAd(this, this);
         inviewAd = new LVDOBannerAd(this, this);
@@ -68,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (rewardedAd != null) {
             rewardedAd.resume();
         }
+        if (videoHelper != null) {
+            videoHelper.resume();
+        }
     }
 
     @Override
@@ -78,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         }
         if (rewardedAd != null) {
             rewardedAd.pause();
+        }
+        if (videoHelper != null) {
+            videoHelper.pause();
         }
     }
 
@@ -96,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (preRollVideoAd != null) {
             preRollVideoAd.destroyView();
         }
+        if (videoHelper != null)
+            videoHelper.cleanUp();
     }
 
     public void loadInterstitialAd(View view) {
@@ -188,10 +199,17 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onPrerollAdLoaded(View view) {
+
+        //'view' param is the preRollVideoAd instance FYI!
+
         ((TextView)findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
         ((ViewGroup)findViewById(R.id.adContainer)).removeAllViews();
+
         ((ViewGroup)findViewById(R.id.adContainer)).addView(preRollVideoAd);
+        //((ViewGroup)findViewById(R.id.adContainer)).addView(view);  //same as above !
+
         preRollVideoAd.showAd();
+        //((PreRollVideoAd)view).showAd();  same as above!
     }
 
     @Override
@@ -212,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     @Override
     public void onPrerollAdCompleted(View view) {
 
+        //Let's pretend you want to roll a movie/video when the preroll ad is completed.
+        videoHelper = new VideoHelper(this, findViewById(R.id.adContainer));
+        videoHelper.playContentVideo(0);
     }
 
     @Override
