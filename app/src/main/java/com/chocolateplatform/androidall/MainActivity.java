@@ -1,13 +1,12 @@
 package com.chocolateplatform.androidall;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.amazon.device.ads.AdRegistration;
 import com.vdopia.ads.lw.Chocolate;
 import com.vdopia.ads.lw.InitCallback;
 import com.vdopia.ads.lw.LVDOAdRequest;
@@ -71,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (rewardedAd != null) {
             rewardedAd.resume();
         }
+        if (inviewAd != null) {
+            inviewAd.onResume();
+        }
+        if (preRollVideoAd != null) {
+            preRollVideoAd.onResume();
+        }
         if (videoHelper != null) {
             videoHelper.resume();
         }
@@ -84,6 +89,12 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         }
         if (rewardedAd != null) {
             rewardedAd.pause();
+        }
+        if (inviewAd != null) {
+            inviewAd.onPause();
+        }
+        if (preRollVideoAd != null) {
+            preRollVideoAd.onPause();
         }
         if (videoHelper != null) {
             videoHelper.pause();
@@ -109,6 +120,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             videoHelper.cleanUp();
     }
 
+    /**
+     * Note: In production release, simply call:
+     *
+     * interstitialAd.loadAd( adRequest )
+     *
+     * The selective mediation 'partner chooser' is only for developer entertainment purposes.
+     *
+     * @param view
+     */
     public void loadInterstitialAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
             @Override
@@ -119,6 +139,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         });
     }
 
+    /**
+     * Note: In production release, simply call:
+     *
+     * rewardedAd.loadAd( adRequest )
+     *
+     * The selective mediation 'partner chooser' is only for developer entertainment purposes.
+     *
+     * @param view
+     */
     public void loadRewardedAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_REWARDED, this, new DialogInterface.OnClickListener() {
             @Override
@@ -129,6 +158,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         });
     }
 
+    /**
+     * Note: In production release, simply call:
+     *
+     * inviewAd.loadAd( adRequest )
+     *
+     * The selective mediation 'partner chooser' is only for developer entertainment purposes.
+     *
+     * @param view
+     */
     public void loadInviewAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
             @Override
@@ -139,6 +177,16 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         });
     }
 
+
+    /**
+     * Note: In production release, simply call:
+     *
+     * preRollVideoAd.loadAd( adRequest )
+     *
+     * The selective mediation 'partner chooser' is only for developer entertainment purposes.
+     *
+     * @param view
+     */
     public void loadPrerollAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override

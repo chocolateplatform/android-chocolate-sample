@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:gravity="center"
-    >
+    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"/>
-
-    <Button
-        android:onClick="loadInterstitialAd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Interstitial Ad"/>
-
-    <Button
-        android:onClick="loadRewardedAd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Rewarded Ad"/>
-
-    <Button
-        android:onClick="loadInviewAd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Inview Ad"/>
-
-    <Button
-        android:onClick="loadPrerollAd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Preroll Ad"/>
-
-    <FrameLayout
-        android:id="@+id/adContainer"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:layout_width="300dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"/>
+        >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loadInterstitialAd"
+            android:text="Load Interstitial Ad"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loadRewardedAd"
+            android:text="Load Rewarded Ad"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loadInviewAd"
+            android:text="Load Inview Ad"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loadPrerollAd"
+            android:text="Load Preroll Ad"/>
+
+        <FrameLayout
+            android:id="@+id/adContainer"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+</ScrollView>
