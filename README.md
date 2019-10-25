@@ -8,7 +8,6 @@ Fullscreen Rewarded Video
 
 Variable sized Preroll
 
-
-Check out the sample, it's amazing.
+Using Chocolate Mediation, you WILL earn more ad revenue guaranteed!  Mediation is the WAY TO GO!  Do NOT settle for less.
 
 
