@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private LVDOAdRequest adRequest;
     private LVDORewardedAd rewardedAd;
     private LVDOInterstitialAd interstitialAd;
-    private LVDOBannerAd inviewAd;
+    private LVDOBannerAd bannerAd;
     private PreRollVideoAd preRollVideoAd;
 
     private VideoHelper videoHelper;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
         rewardedAd = new LVDORewardedAd(this, this);
         interstitialAd = new LVDOInterstitialAd(this, this);
-        inviewAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
+        bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
         preRollVideoAd = new PreRollVideoAd(this);
     }
 
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (rewardedAd != null) {
             rewardedAd.onResume();
         }
-        if (inviewAd != null) {
-            inviewAd.onResume();
+        if (bannerAd != null) {
+            bannerAd.onResume();
         }
         if (preRollVideoAd != null) {
             preRollVideoAd.onResume();
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (rewardedAd != null) {
             rewardedAd.onPause();
         }
-        if (inviewAd != null) {
-            inviewAd.onPause();
+        if (bannerAd != null) {
+            bannerAd.onPause();
         }
         if (preRollVideoAd != null) {
             preRollVideoAd.onPause();
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (rewardedAd != null) {
             rewardedAd.destroyView();
         }
-        if (inviewAd != null) {
-            inviewAd.destroyView();
+        if (bannerAd != null) {
+            bannerAd.destroyView();
         }
         if (preRollVideoAd != null) {
             preRollVideoAd.destroyView();
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setInviewPartners(adRequest);
-                inviewAd.loadAd(adRequest);
+                bannerAd.loadAd(adRequest);
             }
         });
     }
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void onBannerAdLoaded(View view) {
         ((ViewGroup)findViewById(R.id.adContainer)).removeAllViews();
         ((ViewGroup)findViewById(R.id.adContainer)).addView(view);
-        ((TextView)findViewById(R.id.textView)).setText("Inview winner: " + inviewAd.getWinningPartnerName());
+        ((TextView)findViewById(R.id.textView)).setText("Inview winner: " + bannerAd.getWinningPartnerName());
     }
 
     @Override
