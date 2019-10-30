@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
         rewardedAd = new LVDORewardedAd(this, this);
         interstitialAd = new LVDOInterstitialAd(this, this);
-        inviewAd = new LVDOBannerAd(this, this);
+        inviewAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
         preRollVideoAd = new PreRollVideoAd(this);
     }
 
@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     protected void onResume() {
         super.onResume();
         if (interstitialAd != null)  {
-            interstitialAd.resume();
+            interstitialAd.onResume();
         }
         if (rewardedAd != null) {
-            rewardedAd.resume();
+            rewardedAd.onResume();
         }
         if (inviewAd != null) {
             inviewAd.onResume();
@@ -85,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     protected void onPause() {
         super.onPause();
         if (interstitialAd != null)  {
-            interstitialAd.pause();
+            interstitialAd.onPause();
         }
         if (rewardedAd != null) {
-            rewardedAd.pause();
+            rewardedAd.onPause();
         }
         if (inviewAd != null) {
             inviewAd.onPause();
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setPrerollPartners(adRequest);
-                preRollVideoAd.loadAd(adRequest, LVDOAdSize.PRE_ROLL, MainActivity.this);
+                preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
             }
         });
     }
@@ -267,6 +267,11 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     @Override
     public void onPrerollAdShown(View view) {
+
+    }
+
+    @Override
+    public void onPrerollAdShownError(View view) {
 
     }
 
