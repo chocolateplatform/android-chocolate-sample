@@ -147,13 +147,13 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     /**
      * Note: In production release, simply call:
      *
-     * inviewAd.loadAd( adRequest )
+     * bannerAd.loadAd( adRequest )
      *
      * The selective mediation 'partner chooser' is only for developer entertainment purposes.
      *
      * @param view
      */
-    public void loadInviewAd(View view) {
+    public void loadBannerAd(View view) {
         bannerAd.loadAd(adRequest);
     }
 
@@ -175,12 +175,12 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void onBannerAdLoaded(View view) {
         ((ViewGroup)findViewById(R.id.adContainer)).removeAllViews();
         ((ViewGroup)findViewById(R.id.adContainer)).addView(view);
-        ((TextView)findViewById(R.id.textView)).setText("Inview winner: " + bannerAd.getWinningPartnerName());
+        ((TextView)findViewById(R.id.textView)).setText("Banner winner: " + bannerAd.getWinningPartnerName());
     }
 
     @Override
     public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Inview No-Fill");
+        ((TextView)findViewById(R.id.textView)).setText("Banner No-Fill");
     }
 
     @Override

@@ -34,7 +34,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="loadInviewAd"
+            android:onClick="loadBannerAd"
             android:text="Load Banner Ad"/>
 
         <Button
