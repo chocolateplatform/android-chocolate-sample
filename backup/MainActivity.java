@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
      *
      * @param view
      */
-    public void loadInviewAd(View view) {
+    public void loadBannerAd(View view) {
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
