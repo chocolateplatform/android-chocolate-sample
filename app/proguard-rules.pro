@@ -12,13 +12,17 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
+
+#Chocolate Platform
 -keepclassmembers class com.vdopia.ads.lw.VPAIDPlayer.JavaScriptInterface {
    public *;
 }
-
-#Vdopia
 -keep class com.vdopia.ads.lw.** {*;}
 -keep interface com.vdopia.ads.lw.** {*;}
+
+-keep class com.iab.omid.library.chocolateplatform.** {*;}
+-keep interface com.iab.omid.library.chocolateplatform.** {*;}
+
 -keepattributes Exceptions, MethodParameters
 -keepattributes LocalVariableTable,LocalVariableTypeTable
 -keepparameternames
@@ -112,7 +116,6 @@
 # For removing warnings due to lack of Multi-Window support
 -dontwarn android.app.Activity
 
-
 #Google IMA
 #https://www.vmax.com/2016/08/09/google-ima-integration-using-android-sdk
 -keep class com.google.** { *; }
@@ -203,7 +206,8 @@ public static final ** CREATOR;
 
 
 # Criteo
--keep class com.criteo.**
+-keep class com.criteo.** {*;}
+-keep interface com.criteo.** {*;}
 
 #Facebook
 #https://www.vmax.com/2016/03/14/facebook-integration-using-android-sdk
