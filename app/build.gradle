@@ -32,7 +32,7 @@ dependencies {
     implementation 'com.vdopia.ads.lw:amazon-adapter:5.9.2'
     implementation 'com.vdopia.ads.lw:applovin-adapter:9.8.4'
     implementation 'com.applovin:applovin-sdk:9.8.4'
-    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.3'
+    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.4'
     implementation 'com.vdopia.ads.lw:facebook-adapter:1.0.6'
     implementation('com.facebook.android:audience-network-sdk:4.99.3') {
         exclude group: 'com.google.android.exoplayer'
