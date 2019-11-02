@@ -117,7 +117,6 @@
 -dontwarn android.app.Activity
 
 #Google IMA
-#https://www.vmax.com/2016/08/09/google-ima-integration-using-android-sdk
 -keep class com.google.** { *; }
 -keep interface com.google.** { *; }
 -keep class com.google.ads.interactivemedia.v3.api.** { *;}
@@ -263,16 +262,14 @@ public static final ** CREATOR;
 }
 -keep class com.google.android.gms.ads.identifier.** { *; }
 
-#Unity Ads
+#Unity
 # Keep all classes in Unity Ads package
--keep class com.unity3d.ads.** {
-   *;
-}
+-keep class com.unity3d.** { *; }
+-keep class org.fmod.** { *; }
+-keep class bitter.jnibridge.** { *; }
 
-# Keep all classes in Unity Services package
--keep class com.unity3d.services.** {
-   *;
-}
+-keep class com.vdopia.unity.plugin.** {*;}
+-keep interface com.vdopia.unity.plugin.** {*;}
 
 -dontwarn com.google.ar.core.**
 
