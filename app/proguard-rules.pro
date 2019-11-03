@@ -1,6 +1,7 @@
 # Proguard settings for Chocolate Platform Mediation SDK
 # Append these to your existing proguard settings when
-# integrating our SDK.
+# integrating our SDK, if you are using proguard in your 
+# android project.
 
 #Chocolate Platform
 -keepclassmembers class com.vdopia.ads.lw.VPAIDPlayer.JavaScriptInterface {
@@ -144,7 +145,6 @@ public static final ** CREATOR;
 
 -keep class com.danikula.** {*;}
 -keep interface com.danikula.** {*;}
-
 
 #Applovin
 # Do not warn about unknown referenced methods if compiling against older Android veresions or Google Play Services Identifier APIs without reflection
