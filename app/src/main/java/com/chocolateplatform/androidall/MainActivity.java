@@ -217,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
 
+        if (adRequest.getPartnerNames() != null) {
+            adRequest.getPartnerNames().clear();
+        }
+        adRequest.addPartnerName(LVDOConstants.PARTNER.CHOCOLATE);
         preRollVideoAd = new PreRollVideoAd(this);
         preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
 
