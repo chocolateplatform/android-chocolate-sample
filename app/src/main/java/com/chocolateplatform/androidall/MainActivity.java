@@ -1,5 +1,6 @@
 package com.chocolateplatform.androidall;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -37,7 +38,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Be sure to set these values into the ad request.
         adRequest = new LVDOAdRequest(this);
+        adRequest.setAppStoreUrl("https://play.google.com/store/apps/details?id=com.democompany.android");
+        adRequest.setRequester("Chocolate Demo Company");
+        adRequest.setAppDomain("http://democompany.com/test");
+        adRequest.setAppName("Chocolate Demo");
+        adRequest.setCategory("IAB2");
+        adRequest.setPublisherDomain("http://democompany.com/");
+
         Chocolate.enableLogging(true);  //don't set true for production
         Chocolate.enableChocolateTestAds(true);  //don't set true for production
         Chocolate.init(this, API_KEY, adRequest, new InitCallback() {
@@ -125,15 +134,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void loadInterstitialAd(View view) {
 
         interstitialAd = new LVDOInterstitialAd(this, this);
-        interstitialAd.loadAd(adRequest);
+        //interstitialAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setInterstitialPartners(adRequest);
                 interstitialAd.loadAd(adRequest);
             }
-        });*/
+        });
     }
 
     /**
@@ -148,15 +157,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void loadRewardedAd(View view) {
 
         rewardedAd = new LVDORewardedAd(this, this);
-        rewardedAd.loadAd(adRequest);
+        //rewardedAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_REWARDED, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_REWARDED, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setRewardedPartners(adRequest);
                 rewardedAd.loadAd(adRequest);
             }
-        });*/
+        });
     }
 
     /**
@@ -174,15 +183,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             bannerAd.destroyView();
 
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.BANNER_320_50, this);
-        bannerAd.loadAd(adRequest);
+        //bannerAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setInviewPartners(adRequest);
                 bannerAd.loadAd(adRequest);
             }
-        });*/
+        });
     }
 
     public void loadBannerAdMREC(View view) {
@@ -191,15 +200,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             bannerAd.destroyView();
 
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
-        bannerAd.loadAd(adRequest);
+        //bannerAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setInviewPartners(adRequest);
                 bannerAd.loadAd(adRequest);
             }
-        });*/
+        });
     }
 
 
@@ -218,15 +227,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             preRollVideoAd.destroyView();
 
         preRollVideoAd = new PreRollVideoAd(this);
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
+        //preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setPrerollPartners(adRequest);
                 preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
             }
-        });*/
+        });
     }
 
     public void loadPrerollAdFullscreen(View view) {
@@ -237,13 +246,13 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         preRollVideoAd = new PreRollVideoAd(this);
         preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
+        ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ChocolatePartners.setPrerollPartners(adRequest);
                 preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
             }
-        });*/
+        });
     }
 
     @Override
