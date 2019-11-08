@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private LVDOInterstitialAd interstitialAd;
     private LVDOBannerAd bannerAd;
     private PreRollVideoAd preRollVideoAd;
+    private ViewGroup adContainer;
 
     private VideoHelper videoHelper;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        adContainer = findViewById(R.id.adContainer);
 
         //Be sure to set these values into the ad request.
         adRequest = new LVDOAdRequest(this);
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (bannerAd != null)
             bannerAd.destroyView();
 
+        setAdContainerSize(true);
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.BANNER_320_50, this);
         //bannerAd.loadAd(adRequest);
 
@@ -199,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (bannerAd != null)
             bannerAd.destroyView();
 
+        setAdContainerSize(false);
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
         //bannerAd.loadAd(adRequest);
 
@@ -226,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
 
+        setAdContainerSize(false);
         preRollVideoAd = new PreRollVideoAd(this);
         //preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
 
@@ -243,8 +248,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
 
+        setAdContainerSize(false);
         preRollVideoAd = new PreRollVideoAd(this);
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
+        //preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
 
         ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override
@@ -381,5 +387,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     @Override
     public void onRewardedVideoCompleted(LVDORewardedAd lvdoRewardedAd) {
 
+    }
+
+    private void setAdContainerSize(boolean isBanner) {
+        if (isBanner) {
+            adContainer.getLayoutParams().width = getResources().getDimensionPixelSize(R.dimen.banner_width);
+            adContainer.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.banner_height);
+        } else {
+            adContainer.getLayoutParams().width = getResources().getDimensionPixelSize(R.dimen.mrec_width);
+            adContainer.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.mrec_height);
+        }
     }
 }
