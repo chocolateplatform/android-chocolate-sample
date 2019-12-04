@@ -19,6 +19,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.chocolateplatform.androidall.ChocolatePrerollActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
 
         <!-- NOTE required after going with google ads 17.0.0+ -->

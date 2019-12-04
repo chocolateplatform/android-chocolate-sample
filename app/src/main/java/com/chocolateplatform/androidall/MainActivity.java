@@ -1,7 +1,8 @@
 package com.chocolateplatform.androidall;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import com.vdopia.ads.lw.PreRollVideoAd;
 import com.vdopia.ads.lw.PrerollAdListener;
 import com.vdopia.ads.lw.RewardedAdListener;
 
-public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
+public class MainActivity extends Activity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
 
     static String API_KEY = "XqjhRR";
 
@@ -231,11 +232,15 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     public void loadPrerollAdFullscreen(View view) {
 
+        startActivity(new Intent(this, ChocolatePrerollActivity.class));
+
+        /*
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
 
         preRollVideoAd = new PreRollVideoAd(this);
         preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
+        */
 
         /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override
