@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vdopia.ads.lw.Chocolate;
 import com.vdopia.ads.lw.InitCallback;
@@ -58,7 +59,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     protected void onResume() {
         super.onResume();
-        if (interstitialAd != null)  {
+        if (interstitialAd != null) {
             interstitialAd.onResume();
         }
         if (rewardedAd != null) {
@@ -78,7 +79,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     protected void onPause() {
         super.onPause();
-        if (interstitialAd != null)  {
+        if (interstitialAd != null) {
             interstitialAd.onPause();
         }
         if (rewardedAd != null) {
@@ -98,7 +99,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (interstitialAd != null)  {
+        if (interstitialAd != null) {
             interstitialAd.destroyView();
         }
         if (rewardedAd != null) {
@@ -116,9 +117,9 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     /**
      * Note: In production release, simply call:
-     *
+     * <p>
      * interstitialAd.loadAd( adRequest )
-     *
+     * <p>
      * The selective mediation 'partner chooser' is only for developer entertainment purposes.
      *
      * @param view
@@ -139,9 +140,9 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     /**
      * Note: In production release, simply call:
-     *
+     * <p>
      * rewardedAd.loadAd( adRequest )
-     *
+     * <p>
      * The selective mediation 'partner chooser' is only for developer entertainment purposes.
      *
      * @param view
@@ -162,9 +163,9 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     /**
      * Note: In production release, simply call:
-     *
+     * <p>
      * bannerAd.loadAd( adRequest )
-     *
+     * <p>
      * The selective mediation 'partner chooser' is only for developer entertainment purposes.
      *
      * @param view
@@ -206,9 +207,9 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     /**
      * Note: In production release, simply call:
-     *
+     * <p>
      * preRollVideoAd.loadAd( adRequest )
-     *
+     * <p>
      * The selective mediation 'partner chooser' is only for developer entertainment purposes.
      *
      * @param view
@@ -230,9 +231,29 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
         });*/
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10) {
+            switch (resultCode) {
+                case ChocolatePrerollActivity.RESULT_AD_COMPLETED:
+                    playUserContent();
+                    break;
+                case ChocolatePrerollActivity.RESULT_AD_ERROR:
+                    Toast.makeText(this, "ad error: could not play ad", Toast.LENGTH_SHORT).show();
+                    break;
+                case ChocolatePrerollActivity.RESULT_NO_FILL:
+                    Toast.makeText(this, "full screen preroll NO-FILL", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public void loadPrerollAdFullscreen(View view) {
 
-        startActivity(new Intent(this, ChocolatePrerollActivity.class));
+        startActivityForResult(new Intent(this, ChocolatePrerollActivity.class), 10);
 
         /*
         if (preRollVideoAd != null)
@@ -257,14 +278,14 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
 
-        ((ViewGroup)findViewById(R.id.adContainer)).removeAllViews();
-        ((ViewGroup)findViewById(R.id.adContainer)).addView(view);
-        ((TextView)findViewById(R.id.textView)).setText("Banner winner: " + bannerAd.getWinningPartnerName());
+        ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
+        ((ViewGroup) findViewById(R.id.adContainer)).addView(view);
+        ((TextView) findViewById(R.id.textView)).setText("Banner winner: " + bannerAd.getWinningPartnerName());
     }
 
     @Override
     public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Banner No-Fill");
+        ((TextView) findViewById(R.id.textView)).setText("Banner No-Fill");
     }
 
     @Override
@@ -280,12 +301,12 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     public void onInterstitialLoaded(LVDOInterstitialAd lvdoInterstitialAd) {
         interstitialAd.show();
-        ((TextView)findViewById(R.id.textView)).setText("Interstitial Ad winner: " + interstitialAd.getWinningPartnerName());
+        ((TextView) findViewById(R.id.textView)).setText("Interstitial Ad winner: " + interstitialAd.getWinningPartnerName());
     }
 
     @Override
     public void onInterstitialFailed(LVDOInterstitialAd lvdoInterstitialAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Interstitial No-Fill");
+        ((TextView) findViewById(R.id.textView)).setText("Interstitial No-Fill");
     }
 
     @Override
@@ -310,10 +331,10 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
             bannerAd.destroyView();
         //'view' param is the preRollVideoAd instance FYI!
 
-        ((TextView)findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
-        ((ViewGroup)findViewById(R.id.adContainer)).removeAllViews();
+        ((TextView) findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
+        ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
 
-        ((ViewGroup)findViewById(R.id.adContainer)).addView(preRollVideoAd);
+        ((ViewGroup) findViewById(R.id.adContainer)).addView(preRollVideoAd);
         //((ViewGroup)findViewById(R.id.adContainer)).addView(view);  //same as above !
 
         preRollVideoAd.showAd();
@@ -322,7 +343,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     @Override
     public void onPrerollAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Preroll No-Fill");
+        ((TextView) findViewById(R.id.textView)).setText("Preroll No-Fill");
     }
 
     @Override
@@ -342,7 +363,10 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     @Override
     public void onPrerollAdCompleted(View view) {
+        playUserContent();
+    }
 
+    private void playUserContent() {
         //Let's pretend you want to roll a movie/video when the preroll ad is completed.
         videoHelper = new VideoHelper(this, findViewById(R.id.adContainer));
         videoHelper.playContentVideo(0);
@@ -351,12 +375,12 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     public void onRewardedVideoLoaded(LVDORewardedAd lvdoRewardedAd) {
         lvdoRewardedAd.showRewardAd("my secret code", "my userid", "V-BUCKS", "5000");
-        ((TextView)findViewById(R.id.textView)).setText("Rewarded Ad winner: " + rewardedAd.getWinningPartnerName());
+        ((TextView) findViewById(R.id.textView)).setText("Rewarded Ad winner: " + rewardedAd.getWinningPartnerName());
     }
 
     @Override
     public void onRewardedVideoFailed(LVDORewardedAd lvdoRewardedAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Rewarded No-Fill");
+        ((TextView) findViewById(R.id.textView)).setText("Rewarded No-Fill");
     }
 
     @Override
@@ -366,7 +390,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     @Override
     public void onRewardedVideoShownError(LVDORewardedAd lvdoRewardedAd, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView)findViewById(R.id.textView)).setText("Rewarded Got Fill, but Error Showing");
+        ((TextView) findViewById(R.id.textView)).setText("Rewarded Got Fill, but Error Showing");
     }
 
     @Override

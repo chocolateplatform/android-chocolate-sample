@@ -5,14 +5,12 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.vdopia.ads.lw.ChocolateLogger;
 import com.vdopia.ads.lw.LVDOAdRequest;
@@ -30,11 +28,13 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
 
     private static final String TAG = "ChocolatePrerollActivity";
 
+    static final int RESULT_NO_FILL = 100;
+    static final int RESULT_AD_COMPLETED = 101;
+    static final int RESULT_AD_ERROR = 102;
+
     private PreRollVideoAd preRollVideoAd;
     private FrameLayout frameLayout;
-    private boolean isFullScreen;
     private boolean isLoaded;
-    private boolean canGoBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +42,7 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
         ChocolateLogger.i(TAG, "  onCreate");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (Build.VERSION.SDK_INT >= 19)
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        else
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        hideNavigation();
         frameLayout = new FrameLayout(this);
         frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         frameLayout.setBackgroundColor(Color.TRANSPARENT);
@@ -56,50 +53,42 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
 
     }
 
+    private void hideNavigation() {
+        if (Build.VERSION.SDK_INT >= 19)
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        else
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
     @Override
     public void onPrerollAdLoaded(View prerollAd) {
         ChocolateLogger.i(TAG, "onPrerollAdLoaded");
-        if (preRollVideoAd.getWinningPartnerName().equals(LVDOConstants.PARTNER.CHOCOLATE)
-              || preRollVideoAd.getWinningPartnerName().equals(LVDOConstants.PARTNER.GOOGLE)) {
-            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            //x = 1024 * 9 / 16   (1024 is the physical width)
-            int height = (displayMetrics.widthPixels * 9) / 16;
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
-            params.gravity = Gravity.CENTER;
-            preRollVideoAd.setLayoutParams(params);
-            isFullScreen = true;
-        } else {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.CENTER;
-            preRollVideoAd.setLayoutParams(params);
-            isFullScreen = false;
-        }
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int height = (displayMetrics.widthPixels * 9) / 16;
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
+        params.gravity = Gravity.CENTER;
+        preRollVideoAd.setLayoutParams(params);
         frameLayout.addView(preRollVideoAd);
         preRollVideoAd.showAd();
         isLoaded = true;
-        startBackTimeout();
         frameLayout.setBackgroundColor(Color.BLACK);
     }
 
     @Override
     public void onPrerollAdFailed(View prerollAd, LVDOConstants.LVDOErrorCode errorCode) {
         ChocolateLogger.i(TAG, "onPrerollAdFailed");
-        Toast.makeText(this, "no fill", Toast.LENGTH_SHORT).show();
-        finish();
+        finishWithResult(RESULT_NO_FILL);
     }
 
     @Override
     public void onPrerollAdShownError(View prerollAd) {
         ChocolateLogger.i(TAG, "onPrerollAdShownError");
-        finish();
+        finishWithResult(RESULT_AD_ERROR);
     }
 
     @Override
     public void onPrerollAdShown(View prerollAd) {
         ChocolateLogger.i(TAG, "onPrerollAdShown");
-        /**
-         * Yes, LOAD is correct
-         */
     }
 
     @Override
@@ -110,7 +99,7 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
     @Override
     public void onPrerollAdCompleted(View prerollAd) {
         ChocolateLogger.i(TAG, "onPrerollAdCompleted");
-        finish();
+        finishWithResult(RESULT_AD_COMPLETED);
     }
 
     private boolean afterFirst = false;
@@ -149,51 +138,34 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
 
     @Override
     public void onBackPressed() {
-        if (canGoBack) {
-            onPrerollAdCompleted(null);
-        }
+        //don't allow user to go back until ad is finished or no-fill
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (Build.VERSION.SDK_INT >= 19)
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        else
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        hideNavigation();
 
         if (isLoaded) {
-            if (isFullScreen) {
-                if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    ChocolateLogger.i(TAG, "  onConfigurationChanged PORTRAIT");
-                    DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-                    //x = 1024 * 9 / 16   (1024 is the physical width)
-                    int height = (displayMetrics.widthPixels * 9) / 16;
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
-                    params.gravity = Gravity.CENTER;
-                    preRollVideoAd.getLayoutParams().width = displayMetrics.widthPixels;
-                    preRollVideoAd.getLayoutParams().height = height;
-                } else {
-                    ChocolateLogger.i(TAG, "  onConfigurationChanged LANDSCAPE");
-                    preRollVideoAd.getLayoutParams().width = FrameLayout.LayoutParams.MATCH_PARENT;
-                    preRollVideoAd.getLayoutParams().height = FrameLayout.LayoutParams.MATCH_PARENT;
-                }
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                ChocolateLogger.i(TAG, "  onConfigurationChanged PORTRAIT");
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                //x = 1024 * 9 / 16   (1024 is the physical width)
+                int height = (displayMetrics.widthPixels * 9) / 16;
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
+                params.gravity = Gravity.CENTER;
+                preRollVideoAd.getLayoutParams().width = displayMetrics.widthPixels;
+                preRollVideoAd.getLayoutParams().height = height;
+            } else {
+                ChocolateLogger.i(TAG, "  onConfigurationChanged LANDSCAPE");
+                preRollVideoAd.getLayoutParams().width = FrameLayout.LayoutParams.MATCH_PARENT;
+                preRollVideoAd.getLayoutParams().height = FrameLayout.LayoutParams.MATCH_PARENT;
             }
         }
     }
 
-    private void startBackTimeout() {
-        new CountDownTimer(7000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                canGoBack = true;
-            }
-        }.start();
+    private void finishWithResult(int result) {
+        setResult(result);
+        finish();
     }
-
 }
