@@ -20,7 +20,14 @@ import com.vdopia.ads.lw.PreRollVideoAd;
 import com.vdopia.ads.lw.PrerollAdListener;
 
 /**
- * Activity to display Preroll full screen ads.
+ *
+ * This is a sample Activity of how to run fullscreen preroll ads.
+ * Since preroll ads in 320x480 (LVDOAdSize.PREROLL_320_480) are just a View you can implement
+ * however you wish, e.g. in a fragment, dialog, etc.
+ *
+ * FYI: LVDOAdSize.PREROLL_FULLSCREEN is just a wrapper around a transparent Activity like this
+ * and internally embedded in the Chocolate SDK for your convenience.
+ *
  *
  * @author Chocolate Platform Team
  */
