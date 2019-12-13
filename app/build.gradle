@@ -28,17 +28,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.vdopia.ads.lw:coresdk:2.8.11'
-    implementation 'com.vdopia.ads.lw:adcolony-adapter:4.1.0'
+    implementation 'com.vdopia.ads.lw:adcolony-adapter:4.1.1'
     implementation 'com.vdopia.ads.lw:amazon-adapter:5.9.2'
     implementation 'com.vdopia.ads.lw:applovin-adapter:9.8.4'
     implementation 'com.applovin:applovin-sdk:9.8.4'
-    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.4'
-    implementation 'com.vdopia.ads.lw:facebook-adapter:1.0.6'
-    implementation('com.facebook.android:audience-network-sdk:4.99.3') {
-        exclude group: 'com.google.android.exoplayer'
-        exclude group: 'com.google.android.gms'
-        exclude group: 'com.android.support'
-    }
+    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.5'
     implementation 'com.vdopia.ads.lw:google-adapter:16.0.2'
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
     //11.0.4 minimum is required, 16.0.0 or newer recommended
@@ -46,20 +40,11 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    implementation 'com.vdopia.ads.lw:mopub-adapter:5.8.0'
-    implementation('com.mopub:mopub-sdk:5.8.0@aar') {
-        transitive = true
-        exclude group: 'com.android.support'
-    }
     implementation 'com.vdopia.ads.lw:tapjoy-adapter:12.2.1.a'
     implementation 'com.tapjoy:tapjoy-android-sdk:12.2.1@aar'
     implementation 'com.vdopia.ads.lw:unity-adapter:3.2.0'
     implementation 'com.vdopia.ads.lw:vungle-adapter:6.4.11'
     implementation('com.github.vungle:vungle-android-sdk:6.4.11') {
-        exclude group: 'com.android.support'
-    }
-    implementation 'com.vdopia.ads.lw:yahoo-adapter:1.0.8'
-    implementation('com.flurry.android:ads:10.0.0') {
         exclude group: 'com.android.support'
     }
 
