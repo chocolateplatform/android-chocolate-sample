@@ -188,6 +188,10 @@ public static final ** CREATOR;
 -keep interface com.adcolony.** {*;}
 -dontwarn com.adcolony.**
 
+-keep class com.iab.omid.** {*;}
+-keep interface com.iab.omid.** {*;}
+-dontwarn com.iab.omid.**
+
 # Amazon
 -keep class com.amazon.** {*;}
 -keep interface com.amazon.** {*;}
