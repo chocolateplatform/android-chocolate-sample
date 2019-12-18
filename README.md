@@ -1,6 +1,6 @@
 "# android-chocolate-sample" 
 
-Banner 300x250
+Banner 300x250, 320x50, 728x90 (tablet)
 
 Fullscreen Interstitial
 
