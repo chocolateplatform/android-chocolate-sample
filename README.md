@@ -10,4 +10,4 @@ Variable sized Preroll
 
 Using Chocolate Mediation, you WILL earn more ad revenue guaranteed!  Mediation is the WAY TO GO!  Do NOT settle for less.
 
-
+<img src="chocolate_sample.jpg"/>
