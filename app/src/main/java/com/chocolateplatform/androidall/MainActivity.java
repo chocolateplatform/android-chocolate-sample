@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private LVDOInterstitialAd interstitialAd;
     private LVDOBannerAd bannerAd;
     private PreRollVideoAd preRollVideoAd;
-    private boolean doFullScreenPrerollAd;
+    private boolean doPrerollAdFragment;
 
     private VideoHelper videoHelper;
     private boolean isLargeLayout;
@@ -221,36 +221,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         });*/
     }
 
-
-    /**
-     * Note: In production release, simply call:
-     * <p>
-     * preRollVideoAd.loadAd( adRequest )
-     * <p>
-     * The selective mediation 'partner chooser' is only for developer entertainment purposes.
-     *
-     * @param view
-     */
-    public void loadPrerollAd(View view) {
-
-        doFullScreenPrerollAd = false;
-        loadPrerollAd();
-
-
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setPrerollPartners(adRequest);
-                preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
-            }
-        });*/
-    }
-
     private void loadPrerollAd() {
-        if (preRollVideoAd != null)
-            preRollVideoAd.destroyView();
-
-        getSupportFragmentManager().popBackStack();
+        cleanupPreroll();
 
         preRollVideoAd = new PreRollVideoAd(this);
         preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
@@ -276,28 +248,27 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         }
     }
 
-    public void loadPrerollAdFullscreen(View view) {
+    public void loadPrerollAdAsView(View view) {
 
-        doFullScreenPrerollAd = true;
+        doPrerollAdFragment = false;
         loadPrerollAd();
+    }
 
-        //startActivityForResult(new Intent(this, ChocolatePrerollActivity.class), 10);
+    public void loadPrerollAdAsFragment(View view) {
 
-        /*
+        doPrerollAdFragment = true;
+        loadPrerollAd();
+    }
+
+    public void loadPrerollAdAsActivity(View view) {
+        cleanupPreroll();
+        startActivityForResult(new Intent(this, ChocolatePrerollActivity.class), 10);
+    }
+
+    private void cleanupPreroll() {
         if (preRollVideoAd != null)
             preRollVideoAd.destroyView();
-
-        preRollVideoAd = new PreRollVideoAd(this);
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
-        */
-
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setPrerollPartners(adRequest);
-                preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_FULLSCREEN, MainActivity.this);
-            }
-        });*/
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -362,8 +333,8 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         ((TextView) findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
         ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
 
-        if (doFullScreenPrerollAd) {
-            showFullScreenPrerollAd();
+        if (doPrerollAdFragment) {
+            showPrerollAdFragment();
         } else {
             ((ViewGroup) findViewById(R.id.adContainer)).addView(preRollVideoAd);
             preRollVideoAd.showAd();
@@ -518,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         }
     }
 
-    private void showFullScreenPrerollAd() {
+    private void showPrerollAdFragment() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         CustomDialogFragment newFragment = new CustomDialogFragment();
@@ -547,12 +518,12 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         View decorView = getWindow().getDecorView();
 
         decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
+                View.SYSTEM_UI_FLAG_IMMERSIVE |
                         // Set the content to appear under the system bars so that the
                         // content doesn't resize when the system bars hide and show.
                         //| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -566,8 +537,18 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         getSupportActionBar().show();
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getFragments().size() > 0) {
+            return;
+        }
+        super.onBackPressed();
     }
 }

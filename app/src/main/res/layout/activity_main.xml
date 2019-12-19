@@ -47,14 +47,20 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="loadPrerollAd"
-            android:text="Load Preroll Ad (Not Full Screen)"/>
+            android:onClick="loadPrerollAdAsView"
+            android:text="Load Preroll Ad (View)"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="loadPrerollAdFullscreen"
-            android:text="Load Preroll Ad (Full Screen)"/>
+            android:onClick="loadPrerollAdAsFragment"
+            android:text="Load Preroll Ad (Fragment)"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loadPrerollAdAsActivity"
+            android:text="Load Preroll Ad (New Activity)"/>
 
         <FrameLayout
             android:id="@+id/adContainer"
