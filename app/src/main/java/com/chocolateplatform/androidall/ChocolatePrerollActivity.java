@@ -57,7 +57,6 @@ public class ChocolatePrerollActivity extends Activity implements PrerollAdListe
         preRollVideoAd = new PreRollVideoAd(this);
         LVDOAdRequest adRequest = new LVDOAdRequest(this);
         preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, this);
-
     }
 
     private void hideNavigation() {

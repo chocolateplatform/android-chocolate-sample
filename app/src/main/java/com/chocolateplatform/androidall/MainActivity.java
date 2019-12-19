@@ -1,10 +1,24 @@
 package com.chocolateplatform.androidall;
 
-import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,23 +36,26 @@ import com.vdopia.ads.lw.PreRollVideoAd;
 import com.vdopia.ads.lw.PrerollAdListener;
 import com.vdopia.ads.lw.RewardedAdListener;
 
-public class MainActivity extends Activity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
+public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
 
     static String API_KEY = "XqjhRR";
+    public static final String TAG = "MainActivity";
 
     private LVDOAdRequest adRequest;
     private LVDORewardedAd rewardedAd;
     private LVDOInterstitialAd interstitialAd;
     private LVDOBannerAd bannerAd;
     private PreRollVideoAd preRollVideoAd;
+    private boolean doFullScreenPrerollAd;
 
     private VideoHelper videoHelper;
+    private boolean isLargeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        isLargeLayout = getResources().getBoolean(R.bool.large_layout);
         adRequest = new LVDOAdRequest(this);
         Chocolate.enableLogging(true);  //don't set true for production
         Chocolate.enableChocolateTestAds(true);  //don't set true for production
@@ -216,11 +233,9 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
      */
     public void loadPrerollAd(View view) {
 
-        if (preRollVideoAd != null)
-            preRollVideoAd.destroyView();
+        doFullScreenPrerollAd = false;
+        loadPrerollAd();
 
-        preRollVideoAd = new PreRollVideoAd(this);
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
 
         /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_PREROLL, this, new DialogInterface.OnClickListener() {
             @Override
@@ -229,6 +244,16 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
                 preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
             }
         });*/
+    }
+
+    private void loadPrerollAd() {
+        if (preRollVideoAd != null)
+            preRollVideoAd.destroyView();
+
+        getSupportFragmentManager().popBackStack();
+
+        preRollVideoAd = new PreRollVideoAd(this);
+        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
     }
 
     @Override
@@ -253,7 +278,10 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     public void loadPrerollAdFullscreen(View view) {
 
-        startActivityForResult(new Intent(this, ChocolatePrerollActivity.class), 10);
+        doFullScreenPrerollAd = true;
+        loadPrerollAd();
+
+        //startActivityForResult(new Intent(this, ChocolatePrerollActivity.class), 10);
 
         /*
         if (preRollVideoAd != null)
@@ -334,11 +362,12 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
         ((TextView) findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
         ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
 
-        ((ViewGroup) findViewById(R.id.adContainer)).addView(preRollVideoAd);
-        //((ViewGroup)findViewById(R.id.adContainer)).addView(view);  //same as above !
-
-        preRollVideoAd.showAd();
-        //((PreRollVideoAd)view).showAd();  same as above!
+        if (doFullScreenPrerollAd) {
+            showFullScreenPrerollAd();
+        } else {
+            ((ViewGroup) findViewById(R.id.adContainer)).addView(preRollVideoAd);
+            preRollVideoAd.showAd();
+        }
     }
 
     @Override
@@ -368,6 +397,7 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
 
     private void playUserContent() {
         //Let's pretend you want to roll a movie/video when the preroll ad is completed.
+        getSupportFragmentManager().popBackStack();
         videoHelper = new VideoHelper(this, findViewById(R.id.adContainer));
         videoHelper.playContentVideo(0);
     }
@@ -401,5 +431,143 @@ public class MainActivity extends Activity implements RewardedAdListener, LVDOIn
     @Override
     public void onRewardedVideoCompleted(LVDORewardedAd lvdoRewardedAd) {
 
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof CustomDialogFragment) {
+            CustomDialogFragment frag = (CustomDialogFragment) fragment;
+            frag.setAdView(preRollVideoAd);
+        }
+    }
+
+    public static class CustomDialogFragment extends DialogFragment {
+
+        private FrameLayout frameLayout;
+        private PreRollVideoAd preRollVideoAd;
+
+        /**
+         * The system calls this to get the DialogFragment's layout, regardless
+         * of whether it's being displayed as a dialog or an embedded fragment.
+         */
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // Inflate the layout to use as dialog or embedded fragment
+            frameLayout = new FrameLayout(container.getContext());
+            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            frameLayout.setBackgroundColor(Color.TRANSPARENT);
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            int height = (displayMetrics.widthPixels * 9) / 16;
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
+            params.gravity = Gravity.CENTER;
+            preRollVideoAd.setLayoutParams(params);
+            frameLayout.addView(preRollVideoAd);
+            preRollVideoAd.showAd();
+            frameLayout.setBackgroundColor(Color.BLACK);
+            return frameLayout;
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            ((MainActivity) getActivity()).hideSystemUI();
+
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            ((MainActivity) getActivity()).showSystemUI();
+        }
+
+        void setAdView(PreRollVideoAd preRollVideoAd) {
+            this.preRollVideoAd = preRollVideoAd;
+        }
+
+        /**
+         * The system calls this only when creating the layout in a dialog.
+         */
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // to modify any dialog characteristics. For example, the dialog includes a
+            // title by default, but your custom layout might not need it. So here you can
+            // remove the dialog title, but you must call the superclass to get the Dialog.
+            Dialog dialog = super.onCreateDialog(savedInstanceState);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            return dialog;
+        }
+
+        @Override
+        public void onConfigurationChanged(Configuration newConfig) {
+            super.onConfigurationChanged(newConfig);
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Log.i(TAG, "  onConfigurationChanged PORTRAIT");
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                //x = 1024 * 9 / 16   (1024 is the physical width)
+                int height = (displayMetrics.widthPixels * 9) / 16;
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(displayMetrics.widthPixels, height);
+                params.gravity = Gravity.CENTER;
+                preRollVideoAd.getLayoutParams().width = displayMetrics.widthPixels;
+                preRollVideoAd.getLayoutParams().height = height;
+            } else {
+                Log.i(TAG, "  onConfigurationChanged LANDSCAPE");
+                preRollVideoAd.getLayoutParams().width = FrameLayout.LayoutParams.MATCH_PARENT;
+                preRollVideoAd.getLayoutParams().height = FrameLayout.LayoutParams.MATCH_PARENT;
+            }
+        }
+    }
+
+    private void showFullScreenPrerollAd() {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CustomDialogFragment newFragment = new CustomDialogFragment();
+
+        if (isLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+            newFragment.show(fragmentManager, "dialog");
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment)
+                    .addToBackStack(null).commit();
+        }
+
+    }
+
+    void hideSystemUI() {
+
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        //| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+        getSupportActionBar().hide();
+    }
+
+    // Shows the system bars by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    void showSystemUI() {
+        getSupportActionBar().show();
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 }
