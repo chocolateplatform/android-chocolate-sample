@@ -52,7 +52,7 @@ public class ChocolatePartners {
         }
     }
 
-    public static List<LVDOConstants.PARTNER> setInterstitialPartners(LVDOAdRequest adRequest) {
+    private static List<LVDOConstants.PARTNER> setInterstitialPartners(LVDOAdRequest adRequest) {
         List<LVDOConstants.PARTNER> list = new ArrayList<>(numInterstitial);
         for (int i = 0; i < numInterstitial; i++) {
             if (interstitial_parters_selected[i]) {
@@ -91,7 +91,7 @@ public class ChocolatePartners {
         }
     }
 
-    public static List<LVDOConstants.PARTNER> setRewardedPartners(LVDOAdRequest adRequest) {
+    private static List<LVDOConstants.PARTNER> setRewardedPartners(LVDOAdRequest adRequest) {
         List<LVDOConstants.PARTNER> list = new ArrayList<>(numRewarded);
         for (int i = 0; i < numRewarded; i++) {
             if (rewarded_parters_selected[i]) {
@@ -127,7 +127,7 @@ public class ChocolatePartners {
         }
     }
 
-    public static List<LVDOConstants.PARTNER> setInviewPartners(LVDOAdRequest adRequest) {
+    private static List<LVDOConstants.PARTNER> setInviewPartners(LVDOAdRequest adRequest) {
         List<LVDOConstants.PARTNER> list = new ArrayList<>(numInview);
         for (int i = 0; i < numInview; i++) {
             if (inview_parters_selected[i]) {
@@ -158,7 +158,7 @@ public class ChocolatePartners {
         }
     }
 
-    public static List<LVDOConstants.PARTNER> setPrerollPartners(LVDOAdRequest adRequest) {
+    private static List<LVDOConstants.PARTNER> setPrerollPartners(LVDOAdRequest adRequest) {
         List<LVDOConstants.PARTNER> list = new ArrayList<>(numPreroll);
         for (int i = 0; i < numPreroll; i++) {
             if (preroll_parters_selected[i]) {
@@ -174,7 +174,7 @@ public class ChocolatePartners {
      * @param context
      * @param listener
      */
-    public static void choosePartners(int adUnitType, Context context, DialogInterface.OnClickListener listener) {
+    static void choosePartners(final Context context, final LVDOAdRequest adRequest, final int adUnitType, final DialogInterface.OnClickListener listener) {
         String[] partners;
         boolean[] selected;
         String title;
@@ -203,7 +203,28 @@ public class ChocolatePartners {
 
             }
         })
-            .setPositiveButton("OK", listener)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (adUnitType) {
+                        case ADTYPE_INTERSTITIAL:
+                            setInterstitialPartners(adRequest);
+                            break;
+                        case ADTYPE_INVIEW:
+                            setInviewPartners(adRequest);
+                            break;
+                        case ADTYPE_PREROLL:
+                            setPrerollPartners(adRequest);
+                            break;
+                        case ADTYPE_REWARDED:
+                            setRewardedPartners(adRequest);
+                            break;
+                        default:
+                        break;
+                    }
+                    listener.onClick(dialog,which);
+                }
+            })
             .setNegativeButton("CANCEL", dummyOnClick)
             .setTitle(title)
             .show();
@@ -220,7 +241,7 @@ public class ChocolatePartners {
     /**
      * @param adUnitType 0:interstitial, 1:rewarded, 2:inview, 3:preroll
      */
-    public static String[] getChosenPartners(int adUnitType) {
+    static String[] getChosenPartners(int adUnitType) {
         String[] partners;
         boolean[] selected;
         String[] chosen;

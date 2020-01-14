@@ -1,6 +1,7 @@
 package com.chocolateplatform.androidall;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -38,8 +39,9 @@ import com.vdopia.ads.lw.RewardedAdListener;
 
 public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
 
-    static String API_KEY = "XqjhRR";
-    public static final String TAG = "MainActivity";
+    private static final String API_KEY = "XqjhRR";
+    private static final String TAG = "MainActivity";
+    private static final boolean DO_CHOOSE_PARTNERS = true; //purely for demonstration purposes.  set false later.
 
     private LVDOAdRequest adRequest;
     private LVDORewardedAd rewardedAd;
@@ -144,15 +146,17 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void loadInterstitialAd(View view) {
 
         interstitialAd = new LVDOInterstitialAd(this, this);
-        interstitialAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INTERSTITIAL, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setInterstitialPartners(adRequest);
-                interstitialAd.loadAd(adRequest);
-            }
-        });*/
+        if (DO_CHOOSE_PARTNERS) {
+            ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INTERSTITIAL, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    interstitialAd.loadAd(adRequest);
+                }
+            });
+        } else {
+            interstitialAd.loadAd(adRequest);
+        }
     }
 
     /**
@@ -167,15 +171,17 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     public void loadRewardedAd(View view) {
 
         rewardedAd = new LVDORewardedAd(this, this);
-        rewardedAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_REWARDED, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setRewardedPartners(adRequest);
-                rewardedAd.loadAd(adRequest);
-            }
-        });*/
+        if (DO_CHOOSE_PARTNERS) {
+            ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_REWARDED, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    rewardedAd.loadAd(adRequest);
+                }
+            });
+        } else {
+            rewardedAd.loadAd(adRequest);
+        }
     }
 
     /**
@@ -193,15 +199,18 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             bannerAd.destroyView();
 
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.BANNER_320_50, this);
-        bannerAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setInviewPartners(adRequest);
-                bannerAd.loadAd(adRequest);
-            }
-        });*/
+        if (DO_CHOOSE_PARTNERS) {
+            ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INVIEW, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    bannerAd.loadAd(adRequest);
+                }
+            });
+        } else {
+            bannerAd.loadAd(adRequest);
+
+        }
     }
 
     public void loadBannerAdMREC(View view) {
@@ -210,22 +219,37 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             bannerAd.destroyView();
 
         bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
-        bannerAd.loadAd(adRequest);
 
-        /*ChocolatePartners.choosePartners(ChocolatePartners.ADTYPE_INVIEW, this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ChocolatePartners.setInviewPartners(adRequest);
-                bannerAd.loadAd(adRequest);
-            }
-        });*/
+        if (DO_CHOOSE_PARTNERS) {
+            ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INVIEW, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    bannerAd.loadAd(adRequest);
+                }
+            });
+        } else {
+            bannerAd.loadAd(adRequest);
+        }
+
     }
 
     private void loadPrerollAd() {
         cleanupPreroll();
 
         preRollVideoAd = new PreRollVideoAd(this);
-        preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
+
+        if (DO_CHOOSE_PARTNERS) {
+            ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_PREROLL, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
+                }
+            });
+        } else {
+            preRollVideoAd.loadAd(adRequest, LVDOAdSize.PREROLL_320_480, MainActivity.this);
+        }
+
+
     }
 
     @Override
@@ -323,12 +347,14 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     }
 
+    /**
+     * view - The preroll video ad view
+     */
     @Override
     public void onPrerollAdLoaded(View view) {
 
         if (bannerAd != null)
             bannerAd.destroyView();
-        //'view' param is the preRollVideoAd instance FYI!
 
         ((TextView) findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
         ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
@@ -422,8 +448,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
          * of whether it's being displayed as a dialog or an embedded fragment.
          */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout to use as dialog or embedded fragment
             frameLayout = new FrameLayout(container.getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -504,8 +529,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             // To make it fullscreen, use the 'content' root view as the container
             // for the fragment, which is always the root view for the activity
-            transaction.add(android.R.id.content, newFragment)
-                    .addToBackStack(null).commit();
+            transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
         }
 
     }
@@ -517,31 +541,23 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
 
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE |
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        //| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE |
+              // Set the content to appear under the system bars so that the
+              // content doesn't resize when the system bars hide and show.
+              //| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+              View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+              // Hide the nav bar and status bar
+              | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         getSupportActionBar().hide();
     }
 
     // Shows the system bars by removing all the flags
-// except for the ones that make the content appear under the system bars.
+    // except for the ones that make the content appear under the system bars.
     void showSystemUI() {
         getSupportActionBar().show();
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     @Override
