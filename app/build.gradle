@@ -54,7 +54,6 @@ dependencies {
 //Note: if you are using Pre-roll, un-comment the following line:
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.11.2'
 
-
 //You do not have to use support library version 28.0.0, however, whichever version you do use
 //must be the same throughout this gradle file.  This does not apply to multidex.
 //Do not use '+' wildcards in the android support library version.
