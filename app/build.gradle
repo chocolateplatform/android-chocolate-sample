@@ -45,6 +45,11 @@ dependencies {
     implementation('com.github.vungle:vungle-android-sdk:6.4.11') {
         exclude group: 'com.android.support'
     }
+    implementation 'com.vdopia.ads.lw:mopub-adapter:5.8.0'
+    implementation('com.mopub:mopub-sdk:5.8.0@aar') {
+        transitive = true
+        exclude group: 'com.android.support'
+    }
 
 //Note: if you are using Pre-roll, un-comment the following line:
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.11.2'
