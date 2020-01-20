@@ -31,7 +31,7 @@ dependencies {
     implementation 'com.vdopia.ads.lw:amazon-adapter:5.9.2'
     implementation 'com.vdopia.ads.lw:applovin-adapter:9.8.4'
     implementation 'com.applovin:applovin-sdk:9.8.4'
-    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.5'
+    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.6'
     implementation 'com.vdopia.ads.lw:google-adapter:16.0.2'
     implementation 'com.google.android.gms:play-services-ads:17.2.1' //11.0.4 minimum is required, 16.0.0 or newer recommended!
     implementation('com.google.android.ads.consent:consent-library:1.0.7') {
