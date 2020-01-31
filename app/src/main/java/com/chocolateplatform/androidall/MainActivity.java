@@ -37,7 +37,7 @@ import com.vdopia.ads.lw.PreRollVideoAd;
 import com.vdopia.ads.lw.PrerollAdListener;
 import com.vdopia.ads.lw.RewardedAdListener;
 
-public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, LVDOBannerAdListener, PrerollAdListener {
+public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, PrerollAdListener {
 
     private static final String API_KEY = "XqjhRR";
     private static final String TAG = "MainActivity";
@@ -198,7 +198,29 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (bannerAd != null)
             bannerAd.destroyView();
 
-        bannerAd = new LVDOBannerAd(this, LVDOAdSize.BANNER_320_50, this);
+        bannerAd = new LVDOBannerAd(this, LVDOAdSize.BANNER_320_50, new LVDOBannerAdListener() {
+            @Override
+            public void onBannerAdLoaded(View view) {
+                ((ViewGroup) findViewById(R.id.banner_container)).removeAllViews();
+                ((ViewGroup) findViewById(R.id.banner_container)).addView(view);
+                ((TextView) findViewById(R.id.textView)).setText("Banner winner: " + bannerAd.getWinningPartnerName());
+            }
+
+            @Override
+            public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
+                ((TextView) findViewById(R.id.textView)).setText("Banner No-Fill");
+            }
+
+            @Override
+            public void onBannerAdClicked(View view) {
+
+            }
+
+            @Override
+            public void onBannerAdClosed(View view) {
+
+            }
+        });
 
         if (DO_CHOOSE_PARTNERS) {
             ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INVIEW, new DialogInterface.OnClickListener() {
@@ -218,7 +240,33 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (bannerAd != null)
             bannerAd.destroyView();
 
-        bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, this);
+        bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, new LVDOBannerAdListener() {
+            @Override
+            public void onBannerAdLoaded(View view) {
+
+                if (preRollVideoAd != null)
+                    preRollVideoAd.destroyView();
+
+                ((ViewGroup) findViewById(R.id.mrec_container)).removeAllViews();
+                ((ViewGroup) findViewById(R.id.mrec_container)).addView(view);
+                ((TextView) findViewById(R.id.textView)).setText("MREC Banner winner: " + bannerAd.getWinningPartnerName());
+            }
+
+            @Override
+            public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
+                ((TextView) findViewById(R.id.textView)).setText("MREC Banner No-Fill");
+            }
+
+            @Override
+            public void onBannerAdClicked(View view) {
+
+            }
+
+            @Override
+            public void onBannerAdClosed(View view) {
+
+            }
+        });
 
         if (DO_CHOOSE_PARTNERS) {
             ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INVIEW, new DialogInterface.OnClickListener() {
@@ -295,31 +343,6 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         getSupportFragmentManager().popBackStack();
     }
 
-    @Override
-    public void onBannerAdLoaded(View view) {
-
-        if (preRollVideoAd != null)
-            preRollVideoAd.destroyView();
-
-        ((ViewGroup) findViewById(R.id.adContainer)).removeAllViews();
-        ((ViewGroup) findViewById(R.id.adContainer)).addView(view);
-        ((TextView) findViewById(R.id.textView)).setText("Banner winner: " + bannerAd.getWinningPartnerName());
-    }
-
-    @Override
-    public void onBannerAdFailed(View view, LVDOConstants.LVDOErrorCode lvdoErrorCode) {
-        ((TextView) findViewById(R.id.textView)).setText("Banner No-Fill");
-    }
-
-    @Override
-    public void onBannerAdClicked(View view) {
-
-    }
-
-    @Override
-    public void onBannerAdClosed(View view) {
-
-    }
 
     @Override
     public void onInterstitialLoaded(LVDOInterstitialAd lvdoInterstitialAd) {

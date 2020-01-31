@@ -189,7 +189,7 @@ public class ChocolatePartners {
         } else if (adUnitType == ADTYPE_INVIEW) {
             partners = inview_partners;
             selected = inview_parters_selected;
-            title = "Native Inview";
+            title = "Display";
         } else {
             partners = preroll_partners;
             selected = preroll_parters_selected;

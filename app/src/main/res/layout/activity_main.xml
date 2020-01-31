@@ -63,11 +63,16 @@
             android:text="Load Preroll Ad (New Activity)"/>
 
         <FrameLayout
-            android:id="@+id/adContainer"
+            android:id="@+id/banner_container"
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"/>
+
+        <FrameLayout
+            android:id="@+id/mrec_container"
             android:layout_width="300dp"
             android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:orientation="vertical"/>
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 
