@@ -26,10 +26,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.vdopia.ads.lw:coresdk-beta:2.8.14'
+    implementation 'com.vdopia.ads.lw:coresdk-beta:2.8.14.a'
     implementation 'com.vdopia.ads.lw:adcolony-adapter:4.1.1'
     implementation 'com.vdopia.ads.lw:amazon-adapter-beta:5.9.4'
-    implementation 'com.vdopia.ads.lw:applovin-adapter-beta:9.8.5.f'
+    implementation 'com.vdopia.ads.lw:applovin-adapter-beta:9.8.5.g'
     implementation 'com.applovin:applovin-sdk:9.8.4'
     implementation 'com.vdopia.ads.lw:criteo-adapter-beta:3.2.7'
     implementation 'com.vdopia.ads.lw:google-adapter-beta:16.0.3'

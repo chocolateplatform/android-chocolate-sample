@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private LVDORewardedAd rewardedAd;
     private LVDOInterstitialAd interstitialAd;
     private LVDOBannerAd bannerAd;
+    private LVDOBannerAd mrecBannerAd;
     private PreRollVideoAd preRollVideoAd;
     private boolean doPrerollAdFragment;
 
@@ -87,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         if (bannerAd != null) {
             bannerAd.onResume();
         }
+        if (mrecBannerAd != null) {
+            mrecBannerAd.onResume();
+        }
         if (preRollVideoAd != null) {
             preRollVideoAd.onResume();
         }
@@ -126,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
         }
         if (bannerAd != null) {
             bannerAd.destroyView();
+        }
+        if (mrecBannerAd != null) {
+            mrecBannerAd.destroyView();
         }
         if (preRollVideoAd != null) {
             preRollVideoAd.destroyView();
@@ -237,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
     public void loadBannerAdMREC(View view) {
 
-        if (bannerAd != null)
-            bannerAd.destroyView();
+        if (mrecBannerAd != null)
+            mrecBannerAd.destroyView();
 
-        bannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, new LVDOBannerAdListener() {
+        mrecBannerAd = new LVDOBannerAd(this, LVDOAdSize.MEDIUM_RECT_300_250, new LVDOBannerAdListener() {
             @Override
             public void onBannerAdLoaded(View view) {
 
@@ -249,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
 
                 ((ViewGroup) findViewById(R.id.mrec_container)).removeAllViews();
                 ((ViewGroup) findViewById(R.id.mrec_container)).addView(view);
-                ((TextView) findViewById(R.id.textView)).setText("MREC Banner winner: " + bannerAd.getWinningPartnerName());
+                ((TextView) findViewById(R.id.textView)).setText("MREC Banner winner: " + mrecBannerAd.getWinningPartnerName());
             }
 
             @Override
@@ -272,11 +279,11 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             ChocolatePartners.choosePartners(this, adRequest, ChocolatePartners.ADTYPE_INVIEW, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    bannerAd.loadAd(adRequest);
+                    mrecBannerAd.loadAd(adRequest);
                 }
             });
         } else {
-            bannerAd.loadAd(adRequest);
+            mrecBannerAd.loadAd(adRequest);
         }
 
     }
