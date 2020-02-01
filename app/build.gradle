@@ -26,13 +26,13 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.vdopia.ads.lw:coresdk:2.8.13'
+    implementation 'com.vdopia.ads.lw:coresdk-beta:2.8.14.a'
     implementation 'com.vdopia.ads.lw:adcolony-adapter:4.1.1'
-    implementation 'com.vdopia.ads.lw:amazon-adapter:5.9.3'
-    implementation 'com.vdopia.ads.lw:applovin-adapter:9.8.4'
+    implementation 'com.vdopia.ads.lw:amazon-adapter-beta:5.9.4'
+    implementation 'com.vdopia.ads.lw:applovin-adapter-beta:9.8.5.i'
     implementation 'com.applovin:applovin-sdk:9.8.4'
-    implementation 'com.vdopia.ads.lw:criteo-adapter:3.2.6'
-    implementation 'com.vdopia.ads.lw:google-adapter:16.0.2'
+    implementation 'com.vdopia.ads.lw:criteo-adapter-beta:3.2.7'
+    implementation 'com.vdopia.ads.lw:google-adapter-beta:16.0.3'
     implementation 'com.google.android.gms:play-services-ads:17.2.1' //11.0.4 minimum is required, 16.0.0 or newer recommended!
     implementation('com.google.android.ads.consent:consent-library:1.0.7') {
         exclude group: 'com.android.support'
@@ -45,7 +45,7 @@ dependencies {
     implementation('com.github.vungle:vungle-android-sdk:6.4.11') {
         exclude group: 'com.android.support'
     }
-    implementation 'com.vdopia.ads.lw:mopub-adapter:5.8.0'
+    implementation 'com.vdopia.ads.lw:mopub-adapter-beta:5.8.0.a'
     implementation('com.mopub:mopub-sdk:5.8.0@aar') {
         transitive = true
         exclude group: 'com.android.support'

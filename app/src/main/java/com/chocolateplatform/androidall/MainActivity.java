@@ -39,6 +39,7 @@ import com.vdopia.ads.lw.RewardedAdListener;
 
 public class MainActivity extends AppCompatActivity implements RewardedAdListener, LVDOInterstitialListener, PrerollAdListener {
 
+    //private static final String API_KEY = "MwLJU6"; //anurag's key
     private static final String API_KEY = "XqjhRR";
     private static final String TAG = "MainActivity";
     private static final boolean DO_CHOOSE_PARTNERS = true; //purely for demonstration purposes.  set false later.
