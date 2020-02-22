@@ -388,12 +388,12 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
             bannerAd.destroyView();
 
         ((TextView) findViewById(R.id.textView)).setText("PreRoll Ad winner: " + preRollVideoAd.getWinningPartnerName());
-        ((ViewGroup) findViewById(R.id.banner_container)).removeAllViews();
+        ((ViewGroup) findViewById(R.id.mrec_container)).removeAllViews();
 
         if (doPrerollAdFragment) {
             showPrerollAdFragment();
         } else {
-            ((ViewGroup) findViewById(R.id.banner_container)).addView(preRollVideoAd);
+            ((ViewGroup) findViewById(R.id.mrec_container)).addView(preRollVideoAd);
             preRollVideoAd.showAd();
         }
     }
@@ -426,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements RewardedAdListene
     private void playUserContent() {
         //Let's pretend you want to roll a movie/video when the preroll ad is completed.
         getSupportFragmentManager().popBackStack();
-        videoHelper = new VideoHelper(this, findViewById(R.id.banner_container));
+        videoHelper = new VideoHelper(this, findViewById(R.id.mrec_container));
         videoHelper.playContentVideo(0);
     }
 
