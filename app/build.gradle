@@ -51,6 +51,13 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
+    implementation 'com.vdopia.ads.lw:facebook-adapter:1.0.6'
+    implementation('com.facebook.android:audience-network-sdk:4.99.3') {
+        exclude group: 'com.google.android.exoplayer'
+        exclude group: 'com.google.android.gms'
+        exclude group: 'com.android.support'
+    }
+
 //Note: if you are using Pre-roll, un-comment the following line:
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.11.2'
 
